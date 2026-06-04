@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>深度人格与命运解析系统™</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --ink: #1a0e2e;
+  --gold: #c9a84c;
+  --gold2: #f0d080;
+  --mist: #e8e0d0;
+  --deep: #0d0820;
+  --purple: #4a2080;
+  --red: #8b1a1a;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--deep);
+  color: var(--mist);
+  font-family: 'Noto Serif SC', serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    radial-gradient(1px 1px at 10% 20%, rgba(255,255,200,0.6) 0%, transparent 100%),
+    radial-gradient(1px 1px at 30% 60%, rgba(255,255,200,0.4) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 50% 10%, rgba(255,255,200,0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 70% 80%, rgba(255,255,200,0.6) 0%, transparent 100%),
+    radial-gradient(1px 1px at 85% 35%, rgba(255,255,200,0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 20% 90%, rgba(255,255,200,0.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 60% 45%, rgba(255,255,200,0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 40% 75%, rgba(255,255,200,0.4) 0%, transparent 100%),
+    radial-gradient(2px 2px at 90% 15%, rgba(255,255,200,0.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 15% 50%, rgba(255,255,200,0.5) 0%, transparent 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  height: 40%;
+  background: linear-gradient(to top, rgba(74,32,128,0.3), transparent);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ==================== DISCLAIMER ==================== */
+#disclaimer {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 40px 24px;
+  text-align: center;
+}
+
+.disc-badge {
+  font-size: 11px;
+  letter-spacing: 6px;
+  color: #666;
+  margin-bottom: 32px;
+  text-transform: uppercase;
+}
+
+.disc-title {
+  font-size: 13px;
+  letter-spacing: 4px;
+  color: #aaa;
+  margin-bottom: 40px;
+  font-family: 'Noto Serif SC', serif;
+}
+
+.disc-body {
+  max-width: 560px;
+  font-size: clamp(14px, 3.5vw, 18px);
+  color: #fff;
+  line-height: 2.4;
+  font-family: 'Noto Serif SC', serif;
+  font-weight: 400;
+  border-left: 2px solid #444;
+  padding-left: 24px;
+  text-align: left;
+  margin-bottom: 50px;
+}
+
+.disc-body em {
+  color: #f0c050;
+  font-style: normal;
+}
+
+.disc-divider {
+  width: 60px;
+  height: 1px;
+  background: #333;
+  margin: 0 auto 40px;
+}
+
+.disc-warn {
+  font-size: 12px;
+  color: #555;
+  letter-spacing: 2px;
+  margin-bottom: 36px;
+}
+
+.btn-enter {
+  padding: 16px 48px;
+  background: #fff;
+  color: #000;
+  border: none;
+  font-size: 15px;
+  font-family: 'Noto Serif SC', serif;
+  letter-spacing: 6px;
+  cursor: pointer;
+  transition: all 0.3s;
+  position: relative;
+}
+
+.btn-enter::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border: 1px solid #444;
+}
+
+.btn-enter:hover {
+  background: #f0c050;
+  letter-spacing: 8px;
+}
+
+.disc-fade-out {
+  animation: discFade 0.7s ease forwards;
+}
+
+@keyframes discFade {
+  to { opacity: 0; pointer-events: none; }
+}
+
+/* ==================== MAIN ==================== */
+.container {
+  max-width: 720px;
+  margin: auto;
+  padding: 40px 24px 60px;
+  position: relative;
+  z-index: 1;
+}
+
+.header { text-align: center; margin-bottom: 50px; }
+
+.header-eyebrow {
+  font-size: 11px;
+  letter-spacing: 8px;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  opacity: 0.8;
+}
+
+.header h1 {
+  font-family: 'Ma Shan Zheng', cursive;
+  font-size: clamp(28px, 6vw, 48px);
+  color: var(--gold2);
+  text-shadow: 0 0 30px rgba(201,168,76,0.5), 0 0 60px rgba(201,168,76,0.2);
+  line-height: 1.3;
+  margin-bottom: 10px;
+}
+
+.header-sub {
+  font-size: 12px;
+  color: rgba(232,224,208,0.4);
+  letter-spacing: 3px;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 20px 0 40px;
+  opacity: 0.4;
+}
+.divider::before, .divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--gold), transparent);
+}
+.divider span { color: var(--gold); font-size: 14px; }
+
+/* Music toggle */
+.music-btn {
+  position: fixed;
+  top: 18px; right: 18px;
+  z-index: 1000;
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  border: 1px solid rgba(201,168,76,0.4);
+  background: rgba(13,8,32,0.8);
+  color: var(--gold);
+  font-size: 16px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.3s;
+  backdrop-filter: blur(8px);
+}
+.music-btn:hover { border-color: var(--gold); background: rgba(74,32,128,0.5); }
+.music-btn.muted { opacity: 0.4; }
+
+/* Progress */
+.progress-wrap { margin-bottom: 36px; }
+.progress-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: rgba(201,168,76,0.6);
+  letter-spacing: 2px;
+  margin-bottom: 8px;
+}
+.progress-track {
+  height: 2px;
+  background: rgba(201,168,76,0.15);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(to right, var(--purple), var(--gold));
+  border-radius: 2px;
+  transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
+  box-shadow: 0 0 8px rgba(201,168,76,0.5);
+}
+
+/* Question card */
+.question-card {
+  background: linear-gradient(135deg, rgba(74,32,128,0.25), rgba(13,8,32,0.6));
+  border: 1px solid rgba(201,168,76,0.2);
+  border-radius: 16px;
+  padding: 36px 32px;
+  position: relative;
+  overflow: hidden;
+  animation: slideIn 0.5s cubic-bezier(0.4,0,0.2,1);
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(20px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.question-card::before {
+  content: '';
+  position: absolute;
+  top: -60px; right: -60px;
+  width: 200px; height: 200px;
+  background: radial-gradient(circle, rgba(201,168,76,0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.question-num {
+  font-size: 11px;
+  letter-spacing: 4px;
+  color: var(--gold);
+  opacity: 0.7;
+  margin-bottom: 16px;
+}
+
+.question-text {
+  font-family: 'Ma Shan Zheng', cursive;
+  font-size: clamp(18px, 4vw, 26px);
+  color: var(--mist);
+  margin-bottom: 32px;
+  line-height: 1.6;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 20px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(201,168,76,0.15);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  font-size: 15px;
+  color: var(--mist);
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+}
+
+.option::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(201,168,76,0.1), transparent);
+  opacity: 0;
+  transition: opacity 0.25s;
+}
+
+.option:hover { border-color: rgba(201,168,76,0.5); transform: translateX(4px); }
+.option:hover::before { opacity: 1; }
+
+.option.selected {
+  border-color: var(--gold);
+  background: rgba(201,168,76,0.12);
+  transform: translateX(4px);
+}
+
+.option-dot {
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(201,168,76,0.4);
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px;
+  transition: all 0.25s;
+}
+
+.option.selected .option-dot {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--ink);
+}
+
+.btn-next {
+  margin-top: 28px;
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, var(--purple), #6d28d9);
+  border: 1px solid rgba(201,168,76,0.3);
+  border-radius: 10px;
+  color: var(--gold2);
+  font-size: 16px;
+  font-family: 'Ma Shan Zheng', cursive;
+  cursor: pointer;
+  letter-spacing: 4px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  display: none;
+}
+
+.btn-next::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.05), transparent);
+}
+
+.btn-next:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(109,40,217,0.5), 0 0 20px rgba(201,168,76,0.2);
+}
+
+.btn-next.visible { display: block; animation: fadeIn 0.3s ease; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ==================== TAROT ==================== */
+#tarotArea { display: none; text-align: center; }
+
+.tarot-title {
+  font-family: 'Ma Shan Zheng', cursive;
+  font-size: clamp(22px, 5vw, 36px);
+  color: var(--gold2);
+  margin-bottom: 8px;
+  text-shadow: 0 0 20px rgba(201,168,76,0.4);
+}
+
+.tarot-sub {
+  font-size: 12px;
+  color: rgba(232,224,208,0.4);
+  letter-spacing: 3px;
+  margin-bottom: 50px;
+}
+
+.cards-row {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-bottom: 50px;
+}
+
+.card-scene {
+  perspective: 1000px;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.card-scene.appeared {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.card-label {
+  font-size: 11px;
+  letter-spacing: 3px;
+  color: rgba(201,168,76,0.5);
+  margin-top: 12px;
+  font-family: 'Noto Serif SC', serif;
+  min-height: 18px;
+  transition: color 0.5s;
+}
+
+.card-label.revealed {
+  color: var(--gold);
+}
+
+.card-wrap {
+  width: 130px;
+  height: 210px;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 1s cubic-bezier(0.4,0,0.2,1);
+  cursor: default;
+}
+
+.card-wrap.flipped {
+  transform: rotateY(180deg);
+}
+
+.card-face {
+  position: absolute;
+  inset: 0;
+  border-radius: 14px;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.6), 0 0 20px rgba(201,168,76,0.15);
+}
+
+.card-back {
+  background: linear-gradient(135deg, #2b1060, #4a2080, #1a0840);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(201,168,76,0.3);
+}
+
+.card-back-inner {
+  width: 80%; height: 80%;
+  border: 1px solid rgba(201,168,76,0.3);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 8px;
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(201,168,76,0.03) 0px,
+    rgba(201,168,76,0.03) 2px,
+    transparent 2px,
+    transparent 10px
+  );
+}
+
+.card-back-inner .symbol { font-size: 28px; opacity: 0.7; }
+.card-back-inner .rune {
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: var(--gold);
+  opacity: 0.5;
+}
+
+.card-front {
+  transform: rotateY(180deg);
+  background: #0d0820;
+  border: 1px solid rgba(201,168,76,0.4);
+}
+
+.card-front img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 13px;
+  display: block;
+}
+
+.card-wrap.flipped .card-front {
+  animation: cardGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes cardGlow {
+  from { box-shadow: 0 10px 40px rgba(0,0,0,0.6), 0 0 20px rgba(201,168,76,0.2); }
+  to   { box-shadow: 0 10px 40px rgba(0,0,0,0.6), 0 0 40px rgba(201,168,76,0.5); }
+}
+
+.particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* ==================== RESULT ==================== */
+#result {
+  display: none;
+  animation: slideIn 0.6s cubic-bezier(0.4,0,0.2,1);
+}
+
+.result-box {
+  background: linear-gradient(135deg, rgba(74,32,128,0.2), rgba(13,8,32,0.7));
+  border: 1px solid rgba(201,168,76,0.2);
+  border-radius: 16px;
+  padding: 36px 32px;
+  text-align: left;
+  line-height: 2;
+  font-size: 15px;
+  color: rgba(232,224,208,0.85);
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+
+.result-box::before {
+  content: '"';
+  position: absolute;
+  top: -20px; left: 16px;
+  font-size: 120px;
+  color: rgba(201,168,76,0.06);
+  font-family: serif;
+  line-height: 1;
+}
+
+.result-box h2 {
+  font-family: 'Ma Shan Zheng', cursive;
+  font-size: 24px;
+  color: var(--gold2);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.result-text {
+  font-size: 15px;
+  line-height: 2.2;
+  color: rgba(232,224,208,0.8);
+}
+
+.btn-translate {
+  width: 100%;
+  padding: 15px;
+  background: transparent;
+  border: 1px solid rgba(201,168,76,0.4);
+  border-radius: 10px;
+  color: var(--gold);
+  font-size: 15px;
+  font-family: 'Ma Shan Zheng', cursive;
+  letter-spacing: 3px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.btn-translate:hover {
+  background: rgba(201,168,76,0.1);
+  border-color: var(--gold);
+  box-shadow: 0 0 20px rgba(201,168,76,0.2);
+}
+
+.human-result {
+  display: none;
+  margin-top: 20px;
+  padding: 24px;
+  background: rgba(139,26,26,0.15);
+  border: 1px solid rgba(139,26,26,0.3);
+  border-radius: 12px;
+  font-family: 'Ma Shan Zheng', cursive;
+  font-size: clamp(16px, 3.5vw, 22px);
+  color: #f4c6a0;
+  line-height: 2;
+  text-align: center;
+  animation: fadeIn 0.4s ease;
+}
+
+/* Floating particles */
+.float-particle {
+  position: fixed;
+  pointer-events: none;
+  border-radius: 50%;
+  opacity: 0;
+  animation: floatUp linear infinite;
+  z-index: 0;
+}
+
+@keyframes floatUp {
+  0%   { opacity: 0; transform: translateY(0) scale(1); }
+  10%  { opacity: 0.6; }
+  90%  { opacity: 0.2; }
+  100% { opacity: 0; transform: translateY(-100vh) scale(0.3); }
+}
+</style>
+</head>
+
+<body>
+
+<!-- Background music -->
+<audio id="bgm" src="old_doll.mp3" loop preload="auto"></audio>
+
+<!-- Music toggle button -->
+<button class="music-btn" id="musicBtn" onclick="toggleMusic()" title="音乐开关">♪</button>
+
+<!-- ==================== DISCLAIMER ==================== -->
+<div id="disclaimer">
+  <div class="disc-badge">⚠ 重要声明 · DISCLAIMER</div>
+  <div class="disc-title">请在进入前阅读以下内容</div>
+
+  <div class="disc-body">
+    这是一个<em>抽象整活的心理测试静态网页</em>，<br>
+    作者是抖音及小黑盒用户 <em>AginGriffin</em>，<br>
+    <br>
+    本网页<em>完全免费</em>。<br>
+    <br>
+    如果你是<em>付费打开的这个网页</em>，<br>
+    请立即退款。
+  </div>
+
+  <div class="disc-divider"></div>
+  <div class="disc-warn">本测试结果纯属娱乐，不构成任何专业建议</div>
+
+  <button class="btn-enter" onclick="enterSite()">我已知晓，进入</button>
+</div>
+
+<!-- ==================== MAIN ==================== -->
+<div class="container">
+
+  <div class="header">
+    <div class="header-eyebrow">✦ 玄术•塔罗•占星 ✦</div>
+    <h1>深度人格与命运解析系统™</h1>
+    <div class="header-sub">由星象 · 塔罗 · 量子纠缠驱动</div>
+  </div>
+
+  <div class="divider"><span>☽</span></div>
+
+  <!-- Quiz -->
+  <div id="quiz">
+    <div class="progress-wrap">
+      <div class="progress-label">
+        <span>灵魂校准中</span>
+        <span id="progText">1 / 5</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progFill" style="width:20%"></div>
+      </div>
+    </div>
+    <div id="questionCard"></div>
+  </div>
+
+  <!-- Tarot -->
+  <div id="tarotArea">
+    <div class="tarot-title">🔮 正在抽取命运牌阵</div>
+    <div class="tarot-sub">请屏息凝神，静待天机显现</div>
+    <div class="cards-row" id="cardsRow"></div>
+  </div>
+
+  <!-- Result -->
+  <div id="result">
+    <div class="result-box">
+      <h2> 命运解析报告</h2>
+      <div class="result-text">
+        在你的原生家庭场域中，你的父亲与母亲各自完成了基于生物学本能的社会化性别认同。
+        他们在一个你尚未介入的时间节点，以合法的契约达成了异质性亲密关系的联结。
+        这种经典的双向性别认同闭环，决定了他们在潜意识的性取向谱系中，
+        完美地锚定在传统常态的坐标轴上。
+      </div>
+    </div>
+
+    <button class="btn-translate" onclick="translateHuman()"> 人话翻译</button>
+
+    <div class="human-result" id="humanResult">
+      你爸不是Gay，你妈不是拉拉，<br>
+      你爸和你妈结过婚，并且你没有参加，<br>
+      你爸是男的你妈是女的，<br>
+      你爸妈性取向和性认知正常。
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ==================== AMBIENT PARTICLES ====================
+for(let i=0;i<12;i++){
+  const p=document.createElement('div');
+  p.className='float-particle';
+  const size=Math.random()*3+1;
+  p.style.cssText=`
+    width:${size}px;height:${size}px;
+    left:${Math.random()*100}vw;
+    bottom:${Math.random()*20}vh;
+    background:hsl(${40+Math.random()*20},70%,70%);
+    animation-duration:${8+Math.random()*12}s;
+    animation-delay:${Math.random()*8}s;
+  `;
+  document.body.appendChild(p);
+}
+
+// ==================== MUSIC ====================
+let musicPlaying = false;
+const bgm = document.getElementById('bgm');
+bgm.volume = 0.45;
+
+function toggleMusic() {
+  const btn = document.getElementById('musicBtn');
+  if(musicPlaying) {
+    bgm.pause();
+    musicPlaying = false;
+    btn.textContent = '♪';
+    btn.classList.add('muted');
+  } else {
+    bgm.play().catch(()=>{});
+    musicPlaying = true;
+    btn.textContent = '♫';
+    btn.classList.remove('muted');
+  }
+}
+
+function enterSite() {
+  const disc = document.getElementById('disclaimer');
+  disc.classList.add('disc-fade-out');
+  setTimeout(() => { disc.style.display = 'none'; }, 700);
+  // Autoplay music on user interaction
+  bgm.play().then(() => {
+    musicPlaying = true;
+    document.getElementById('musicBtn').textContent = '♫';
+  }).catch(()=>{});
+}
+
+// ==================== QUIZ ====================
+const questions = [
+  {
+    text: "你觉得自己比较像？",
+    opts: [" 猫", " 狗", " 电饭煲", " 山姆超市的瑞士卷"]
+  },
+  {
+    text: "如果宇宙是一根香蕉，你会？",
+    opts: [" 吃掉", " 晒成香蕉干", " 报警", " 发朋友圈"]
+  },
+  {
+    text: "你更偏向哪个时间？",
+    opts: [" 白天", " 夜晚", " 星期八", " 永远的下午三点"]
+  },
+  {
+    text: "看到鸽子时你会？",
+    opts: [" 夸赞", " 辱骂", " 怀疑它是武装直升机", " 尝试建立国际外交关系"]
+  },
+  {
+    text: "最想拥有哪种超能力？",
+    opts: [" 无限芒果", " 隐身", " 让WiFi永不断线", " 随地大小觉"]
+  }
+];
+
+let current = 0;
+const answers = [];
+
+function renderQuestion() {
+  const q = questions[current];
+  const card = document.getElementById('questionCard');
+  card.style.opacity = '0';
+  card.style.transform = 'translateY(10px)';
+
+  setTimeout(() => {
+    const letters = ['甲','乙','丙','丁'];
+    card.innerHTML = `
+      <div class="question-card">
+        <div class="question-num">第 ${current+1} 问 · 共 ${questions.length} 问</div>
+        <div class="question-text">${q.text}</div>
+        <div class="options">
+          ${q.opts.map((o,i) => `
+            <button class="option" onclick="selectOption(this,${i})">
+              <div class="option-dot">${letters[i]}</div>
+              <span>${o}</span>
+            </button>
+          `).join('')}
+        </div>
+        <button class="btn-next" id="btnNext" onclick="nextQuestion()">
+          ${current < questions.length-1 ? '继续推演 →' : '启动命运解析 ✦'}
+        </button>
+      </div>
+    `;
+    card.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+    card.style.opacity = '1';
+    card.style.transform = 'translateY(0)';
+  }, 150);
+
+  const pct = ((current+1)/questions.length)*100;
+  document.getElementById('progFill').style.width = pct + '%';
+  document.getElementById('progText').innerText = `${current+1} / ${questions.length}`;
+}
+
+function selectOption(el, idx) {
+  document.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  answers[current] = idx;
+  const btn = document.getElementById('btnNext');
+  if(btn) btn.classList.add('visible');
+}
+
+function nextQuestion() {
+  if(answers[current] === undefined) return;
+  current++;
+  if(current < questions.length) {
+    renderQuestion();
+  } else {
+    startTarot();
+  }
+}
+
+renderQuestion();
+
+// ==================== TAROT ====================
+const cardLabels = ['过去之牌', '现在之牌', '未来之牌'];
+
+function pickThreeUnique() {
+  const pool = [1,2,3,4,5];
+  const picked = [];
+  while(picked.length < 3) {
+    const idx = Math.floor(Math.random() * pool.length);
+    picked.push(pool.splice(idx, 1)[0]);
+  }
+  return picked;
+}
+
+function startTarot() {
+  document.getElementById('quiz').style.display = 'none';
+  const tarotArea = document.getElementById('tarotArea');
+  tarotArea.style.display = 'block';
+
+  const picked = pickThreeUnique();
+  const row = document.getElementById('cardsRow');
+  row.innerHTML = '';
+
+  picked.forEach((num, i) => {
+    const scene = document.createElement('div');
+    scene.className = 'card-scene';
+    scene.id = `scene_${i}`;
+    scene.innerHTML = `
+      <div class="card-wrap" id="cw_${i}">
+        <div class="card-face card-back">
+          <div class="card-back-inner">
+            <div class="symbol">🔮</div>
+            <div class="rune">ARCANA</div>
+          </div>
+        </div>
+        <div class="card-face card-front">
+          <img src="${num}at.jpg" alt="命运之牌"
+            onerror="this.parentElement.innerHTML='<div style=\'display:flex;align-items:center;justify-content:center;height:100%;flex-direction:column;gap:10px;background:linear-gradient(135deg,#2b1060,#4a2080)\'><div style=\'font-size:40px\'>🃏</div><div style=\'font-size:9px;color:#c9a84c;letter-spacing:2px\'>${num}at</div></div>'"
+          >
+        </div>
+        <div class="particles" id="par_${i}"></div>
+      </div>
+      <div class="card-label" id="lbl_${i}">${cardLabels[i]}</div>
+    `;
+    row.appendChild(scene);
+
+    // Staggered appear
+    setTimeout(() => scene.classList.add('appeared'), 200 + i * 300);
+  });
+
+  // Flip cards one by one
+  [0, 1, 2].forEach(i => {
+    setTimeout(() => {
+      const wrap = document.getElementById(`cw_${i}`);
+      const lbl  = document.getElementById(`lbl_${i}`);
+      if(wrap) {
+        wrap.classList.add('flipped');
+        lbl && lbl.classList.add('revealed');
+        burstParticles(i);
+      }
+    }, 1400 + i * 1000);
+  });
+
+  // Show result
+  setTimeout(() => {
+    document.getElementById('result').style.display = 'block';
+    document.getElementById('result').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 5200);
+}
+
+function burstParticles(idx) {
+  const container = document.getElementById(`par_${idx}`);
+  if(!container) return;
+  const colors = ['#f0d080','#c9a84c','#ffffff','#d4a0ff','#a0d4ff'];
+  for(let i=0; i<20; i++){
+    const p = document.createElement('div');
+    p.style.cssText = `
+      position:absolute; border-radius:50%;
+      left:50%; top:50%;
+      width:${2+Math.random()*5}px;
+      height:${2+Math.random()*5}px;
+      background:${colors[Math.floor(Math.random()*colors.length)]};
+    `;
+    container.appendChild(p);
+    const angle = (i/20)*360;
+    const dist = 50 + Math.random()*60;
+    const rad = angle * Math.PI / 180;
+    const tx = Math.cos(rad)*dist;
+    const ty = Math.sin(rad)*dist;
+    p.animate([
+      { opacity:1, transform:`translate(-50%,-50%) translate(0,0) scale(1)` },
+      { opacity:0, transform:`translate(-50%,-50%) translate(${tx}px,${ty}px) scale(0)` }
+    ], { duration: 700, easing:'ease-out', fill:'forwards' });
+  }
+}
+
+function translateHuman() {
+  document.getElementById('humanResult').style.display = 'block';
+  document.getElementById('humanResult').scrollIntoView({ behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
